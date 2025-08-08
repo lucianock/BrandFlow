@@ -18,7 +18,39 @@ class ProductoController extends Controller
      */
     public function index() : View
     {
-        $productos = Producto::with(['getMarca', 'getCate'])->paginate(5);
+        $query = Producto::with(['getMarca', 'getCate']);
+
+        // Búsqueda por texto
+        if (request('search')) {
+            $search = request('search');
+            $query->where(function($q) use ($search) {
+                $q->where('prdNombre', 'LIKE', "%{$search}%")
+                  ->orWhere('prdDescripcion', 'LIKE', "%{$search}%");
+            });
+        }
+
+        // Filtro por marca
+        if (request('brand')) {
+            $query->where('idMarca', request('brand'));
+        }
+
+        // Filtro por categoría
+        if (request('category')) {
+            $query->where('idCategoria', request('category'));
+        }
+
+        // Filtro por precio mínimo
+        if (request('min_price')) {
+            $query->where('prdPrecio', '>=', request('min_price'));
+        }
+
+        // Filtro por precio máximo
+        if (request('max_price')) {
+            $query->where('prdPrecio', '<=', request('max_price'));
+        }
+
+        $productos = $query->orderBy('prdNombre')->paginate(9);
+        
         return \view('productos', [ 'productos'=>$productos ]);
     }
 

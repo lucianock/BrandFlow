@@ -5,14 +5,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\EstadisticasController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('dashboard');
 
 /*##### crud de marcas #####*/
 Route::get('/marcas', [ MarcaController::class, 'index' ])
@@ -55,6 +56,12 @@ Route::put('/producto/update/{producto}', [ ProductoController::class, 'update' 
         ->middleware('auth');
 Route::delete('/producto/delete/{producto}', [ ProductoController::class, 'destroy' ])
         ->middleware('auth');
+
+/*##### estadísticas #####*/
+Route::get('/estadisticas', [ EstadisticasController::class, 'index' ])
+        ->middleware('auth')->name('estadisticas');
+Route::get('/estadisticas/exportar', [ EstadisticasController::class, 'exportar' ])
+        ->middleware('auth')->name('estadisticas.exportar');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
