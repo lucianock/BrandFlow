@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: brandflow_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - brandflow_network
+
+  webserver:
+    image: nginx:alpine
+    container_name: brandflow_nginx
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - brandflow_network
+
+  db:
+    image: mysql:8.0
+    container_name: brandflow_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: brandflow
+      MYSQL_ROOT_PASSWORD: your_mysql_root_password
+      MYSQL_PASSWORD: your_mysql_password
+      MYSQL_USER: brandflow_user
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+      - dbdata:/var/lib/mysql
+    networks:
+      - brandflow_network
+
+  redis:
+    image: redis:alpine
+    container_name: brandflow_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - brandflow_network
+
+volumes:
+  dbdata:
+    driver: local
+
+networks:
+  brandflow_network:
+    driver: bridge
