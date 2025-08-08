@@ -12,4 +12,9 @@ class Marca extends Model
     protected $fillable = ['mkNombre'];
     //protected $guarded = [];
     public $timestamps = false;
+
+    public function productos()
+    {
+        return $this->hasMany(Producto::class, 'idMarca', 'idMarca');
+    }
 }

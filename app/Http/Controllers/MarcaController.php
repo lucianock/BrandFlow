@@ -122,8 +122,34 @@ class MarcaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Marca $marca)
+    public function destroy(Marca $marca) : RedirectResponse
     {
-        //
+        try {
+            $nombreMarca = $marca->mkNombre;
+            
+            // Verificar si hay productos asociados a esta marca
+            $productosAsociados = $marca->productos()->count();
+            if ($productosAsociados > 0) {
+                return redirect('/marcas')
+                    ->with([
+                        'mensaje' => 'No se puede eliminar la marca "' . $nombreMarca . '" porque tiene ' . $productosAsociados . ' producto(s) asociado(s).',
+                        'css' => 'red'
+                    ]);
+            }
+
+            $marca->delete();
+
+            return redirect('/marcas')
+                ->with([
+                    'mensaje' => 'Marca: ' . $nombreMarca . ' eliminada correctamente.',
+                    'css' => 'green'
+                ]);
+        } catch (\Throwable $th) {
+            return redirect('/marcas')
+                ->with([
+                    'mensaje' => 'No se pudo eliminar la marca.',
+                    'css' => 'red'
+                ]);
+        }
     }
 }

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Panel de administración de marcas
+            Panel de administración de categorías
         </h2>
     </x-slot>
 
@@ -17,29 +17,29 @@
                     <thead>
                     <tr>
                         <th class="py-1 px-3 text-left w1/6">id</th>
-                        <th class="py-1 px-3 text-left w4/6">Marca</th>
+                        <th class="py-1 px-3 text-left w4/6">Categoría</th>
                         <th  class="py-1 px-3 text-right w1/6">
-                            <a href="/marca/create"
+                            <a href="/categoria/create"
                                class="inline-flex items-center px-1 py-1 px-3 border-2 rounded-md border-green-400 dark:border-green-600 text-sm font-medium leading-5 text-gray-900 dark:text-green-400 hover:bg-green-900 focus:outline-none focus:border-green-700 transition duration-150 ease-in-out"
                                         >agregar</a>
                         </th>
                     </tr>
                     </thead>
                     <tbody>
-@foreach( $marcas as $marca )
+@foreach( $categorias as $categoria )
                         <tr class="hover:bg-gray-950 odd:bg-gray-700">
-                            <td class="py-2 px-3">{{ $marca->idMarca }}</td>
-                            <td class="py-2 px-3 text-xl">{{ $marca->mkNombre }}</td>
+                            <td class="py-2 px-3">{{ $categoria->idCategoria }}</td>
+                            <td class="py-2 px-3 text-xl">{{ $categoria->catNombre }}</td>
                             <td class="text-right py-2 px-3">
                                 <a
                                     class="inline-flex items-center px-1 py-1 px-3 border-2 rounded-md border-green-400 dark:border-green-600 text-sm font-medium leading-5 text-gray-900 dark:text-green-400 hover:bg-green-900 focus:outline-none focus:border-green-700 transition duration-150 ease-in-out"
-                                    href="{{ url('/marca/edit/'.$marca->idMarca) }}">Modificar</a>
-                                <form method="POST" action="{{ url('/marca/delete/'.$marca->idMarca) }}" class="inline">
+                                    href="{{ url('/categoria/edit/'.$categoria->idCategoria) }}">Modificar</a>
+                                <form method="POST" action="{{ url('/categoria/delete/'.$categoria->idCategoria) }}" class="inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" 
                                             class="inline-flex items-center px-1 py-1 px-3 border-2 rounded-md border-red-400 dark:border-red-600 text-sm font-medium leading-5 text-gray-900 dark:text-red-400 hover:bg-red-900 focus:outline-none focus:border-red-700 transition duration-150 ease-in-out"
-                                            onclick="return confirm('¿Está seguro de que desea eliminar la marca {{ $marca->mkNombre }}?')">
+                                            onclick="return confirm('¿Está seguro de que desea eliminar la categoría {{ $categoria->catNombre }}?')">
                                         Eliminar
                                     </button>
                                 </form>
@@ -50,7 +50,7 @@
                 </table>
 
                 <div class="max-w-lg mx-auto sm:px-6 lg:px-8 py-4">
-                    {{ $marcas->links() }}
+                    {{ $categorias->links() }}
                 </div>
             <!-- fin contenido -->
                 </div>

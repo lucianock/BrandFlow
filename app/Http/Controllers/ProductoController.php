@@ -9,6 +9,7 @@ use App\Models\Producto;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProductCreateRequest;
 use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class ProductoController extends Controller
 {
@@ -17,7 +18,7 @@ class ProductoController extends Controller
      */
     public function index() : View
     {
-        $productos = Producto::paginate(5);
+        $productos = Producto::with(['getMarca', 'getCate'])->paginate(5);
         return \view('productos', [ 'productos'=>$productos ]);
     }
 
@@ -39,41 +40,147 @@ class ProductoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ProductCreateRequest $request)
+    public function store(ProductCreateRequest $request) : RedirectResponse
     {
-        //
-        return 'Si llega este punto es que pasó la validación';
+        try {
+            $producto = new Producto();
+            $producto->prdNombre = $request->prdNombre;
+            $producto->prdPrecio = $request->prdPrecio;
+            $producto->idMarca = $request->idMarca;
+            $producto->idCategoria = $request->idCategoria;
+            $producto->prdDescripcion = $request->prdDescripcion;
+            $producto->prdActivo = 1;
+
+            // Manejo de imagen
+            if ($request->hasFile('prdImagen')) {
+                $imagen = $request->file('prdImagen');
+                $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
+                $imagen->move(public_path('imgs'), $nombreImagen);
+                $producto->prdImagen = $nombreImagen;
+            } else {
+                $producto->prdImagen = 'noDisponible.jpg';
+            }
+
+            $producto->save();
+
+            return redirect('/productos')
+                ->with([
+                    'mensaje' => 'Producto: ' . $request->prdNombre . ' agregado correctamente.',
+                    'css' => 'green'
+                ]);
+        } catch (\Throwable $th) {
+            return redirect('/productos')
+                ->with([
+                    'mensaje' => 'No se pudo agregar el producto: ' . $request->prdNombre,
+                    'css' => 'red'
+                ]);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Producto $producto)
+    public function show(Producto $producto) : View
     {
-        //
+        return view('productoShow', ['producto' => $producto]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Producto $producto)
+    public function edit(Producto $producto) : View
     {
-        //
+        $marcas = Marca::all();
+        $categorias = Categoria::all();
+        return view('productoEdit', [
+            'producto' => $producto,
+            'marcas' => $marcas,
+            'categorias' => $categorias
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Producto $producto)
+    public function update(Request $request, Producto $producto) : RedirectResponse
     {
-        //
+        $request->validate([
+            'prdNombre' => 'required|min:2|max:100',
+            'prdPrecio' => 'required|numeric|min:0',
+            'idMarca' => 'required|exists:marcas,idMarca',
+            'idCategoria' => 'required|exists:categorias,idCategoria',
+            'prdDescripcion' => 'required|min:10|max:500',
+            'prdImagen' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        try {
+            $producto->prdNombre = $request->prdNombre;
+            $producto->prdPrecio = $request->prdPrecio;
+            $producto->idMarca = $request->idMarca;
+            $producto->idCategoria = $request->idCategoria;
+            $producto->prdDescripcion = $request->prdDescripcion;
+
+            // Manejo de imagen
+            if ($request->hasFile('prdImagen')) {
+                // Eliminar imagen anterior si no es la por defecto
+                if ($producto->prdImagen && $producto->prdImagen !== 'noDisponible.jpg') {
+                    $rutaImagen = public_path('imgs/' . $producto->prdImagen);
+                    if (file_exists($rutaImagen)) {
+                        unlink($rutaImagen);
+                    }
+                }
+
+                $imagen = $request->file('prdImagen');
+                $nombreImagen = time() . '_' . $imagen->getClientOriginalName();
+                $imagen->move(public_path('imgs'), $nombreImagen);
+                $producto->prdImagen = $nombreImagen;
+            }
+
+            $producto->save();
+
+            return redirect('/productos')
+                ->with([
+                    'mensaje' => 'Producto: ' . $request->prdNombre . ' modificado correctamente.',
+                    'css' => 'green'
+                ]);
+        } catch (\Throwable $th) {
+            return redirect('/productos')
+                ->with([
+                    'mensaje' => 'No se pudo modificar el producto: ' . $request->prdNombre,
+                    'css' => 'red'
+                ]);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Producto $producto)
+    public function destroy(Producto $producto) : RedirectResponse
     {
-        //
+        try {
+            $nombreProducto = $producto->prdNombre;
+            
+            // Eliminar imagen si no es la por defecto
+            if ($producto->prdImagen && $producto->prdImagen !== 'noDisponible.jpg') {
+                $rutaImagen = public_path('imgs/' . $producto->prdImagen);
+                if (file_exists($rutaImagen)) {
+                    unlink($rutaImagen);
+                }
+            }
+
+            $producto->delete();
+
+            return redirect('/productos')
+                ->with([
+                    'mensaje' => 'Producto: ' . $nombreProducto . ' eliminado correctamente.',
+                    'css' => 'green'
+                ]);
+        } catch (\Throwable $th) {
+            return redirect('/productos')
+                ->with([
+                    'mensaje' => 'No se pudo eliminar el producto.',
+                    'css' => 'red'
+                ]);
+        }
     }
 }
