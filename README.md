@@ -238,19 +238,10 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 - [Alpine.js](https://alpinejs.dev) - Framework JavaScript minimalista
 - [Heroicons](https://heroicons.com) - Iconos hermosos y consistentes
 
-## 📞 Soporte
-
-Si tienes alguna pregunta o necesitas ayuda:
-
-- 📧 Email: soporte@brandflow.com
-- 💬 Discord: [BrandFlow Community](https://discord.gg/brandflow)
-- 📖 Documentación: [docs.brandflow.com](https://docs.brandflow.com)
-- 🐛 Issues: [GitHub Issues](https://github.com/tu-usuario/brandflow/issues)
-
 ---
 
 <div align="center">
-  <p>Hecho con ❤️ por el equipo de BrandFlow</p>
-  <p>⭐ Si te gusta este proyecto, ¡déjanos una estrella!</p>
+  <p>Hecho con el ❤️ por Luciano</p>
+  <p>⭐ Si te gusta este proyecto, ¡dejame una estrella!</p>
 </div>
 
