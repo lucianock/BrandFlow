@@ -29,20 +29,28 @@
                     <div class="text-center">
                         <!-- Logo -->
                         <div class="flex justify-center mb-8">
-                            <div class="bg-white dark:bg-gray-800 rounded-full p-6 shadow-lg">
-                                <svg viewBox="0 0 200 50" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-16 w-auto">
-                                    <circle cx="25" cy="25" r="20" fill="url(#gradient)" stroke="#3B82F6" stroke-width="2"/>
-                                    <path d="M20 15 L30 25 L20 35 M30 15 L40 25 L30 35" stroke="#3B82F6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <text x="55" y="32" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#1F2937">BrandFlow</text>
-                                    <defs>
-                                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                            <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
-                                            <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
-                                        </linearGradient>
-                                    </defs>
-                    </svg>
-                </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-xl border border-gray-200 dark:border-gray-700">
+                                <div class="flex items-center space-x-4">
+                                    <!-- Icono -->
+                                    <div class="relative">
+                                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                            </svg>
+                                        </div>
+                                        <div class="absolute -top-2 -right-2 w-4 h-4 bg-green-400 rounded-full border-2 border-white shadow-lg"></div>
+                                    </div>
+                                    
+                                    <!-- Texto BrandFlow -->
+                                    <div class="flex flex-col">
+                                        <span class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                                            Brand<span class="text-gray-800 dark:text-gray-200">Flow</span>
+                                        </span>
+                                        <span class="text-gray-600 dark:text-gray-400 text-sm font-medium">Sistema de Gestión</span>
+                                    </div>
                                 </div>
+                            </div>
+                        </div>
 
                         <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
                             Bienvenido a BrandFlow

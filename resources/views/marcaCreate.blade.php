@@ -1,52 +1,57 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-400 leading-tight">
-            {{ __('Marcas') }}
-        </h2>
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                Crear Nueva Marca
+            </h2>
+            <a href="/marcas" class="inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                Volver a Marcas
+            </a>
+        </div>
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 border-b border-gray-200">
+        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    @include('layouts.mensajes')
 
-                    <h1 class="pb-4 text-gray-300">Alta de una marca</h1>
-    <!-- formulario -->
-                    <div class="shadow-md rounded-md max-w-3xl mb-72">
-                        <form action="/marca/store" method="post">
-                            @csrf
-                            <div class="p-6">
-                                <label for="mkNombre" class="block text-sm font-medium text-gray-400">
-                                    Nombre de la marca
-                                </label>
-                                <div class="mt-1 flex rounded-md shadow-sm">
-                                    <input type="text" name="mkNombre"
-                                           value="{{ old('mkNombre') }}"
-                                           id="mkNombre" class="py-2 px-3 bg-gray-800 text-green-400 text-2xl focus:ring-green-300 focus:border-green-300 flex-1 block w-full rounded-md border-gray-600">
-                                </div>
-                                @if ($errors->has('mkNombre'))
-                                    <span class="text-sm text-rose-400">{{ $errors->first('mkNombre') }}</span>
-                                @endif
+                    <form action="/marca/store" method="post" class="space-y-6">
+                        @csrf
+                        
+                        <div>
+                            <x-input-label for="mkNombre" :value="__('Nombre de la Marca')" />
+                            <x-text-input id="mkNombre" 
+                                         class="block mt-1 w-full" 
+                                         type="text" 
+                                         name="mkNombre" 
+                                         :value="old('mkNombre')" 
+                                         required 
+                                         autofocus 
+                                         placeholder="Ingrese el nombre de la marca" />
+                            <x-input-error :messages="$errors->get('mkNombre')" class="mt-2" />
+                        </div>
 
-                                <div class="py-6 flex items-center justify-end">
-
-                                    <button class="text-green-500 hover:text-green-400
-                                        bg-green-950 hover:bg-green-900 px-5 py-1 mr-6
-                                        border border-green-500 rounded
-                                        ">Agregar marca</button>
-                                    <a href="/marcas" class="text-gray-400 hover:text-green-300
-                                        bg-gray-900 hover:bg-gray-800 px-5 py-1
-                                        border border-gray-500 rounded
-                                        ">Volver a panel de marcas</a>
-
-                                </div>
-
-                            </div>
-                        </form>
-                    </div>
-        <!-- FIN formulario -->
-
-
+                        <div class="flex items-center justify-end space-x-4">
+                            <a href="/marcas" 
+                               class="inline-flex items-center px-4 py-2 bg-gray-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                                </svg>
+                                Cancelar
+                            </a>
+                            
+                            <x-primary-button class="bg-green-600 hover:bg-green-700 focus:bg-green-700 active:bg-green-900 focus:ring-green-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Crear Marca
+                            </x-primary-button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

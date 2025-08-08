@@ -1,2 +1,17 @@
-<!-- Este es un placeholder para el favicon. En un entorno real, necesitarías crear un archivo .ico real -->
-<!-- El favicon debería ser un ícono de BrandFlow con el logo personalizado -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="15" fill="url(#gradient)" stroke="#1E40AF" stroke-width="1"/>
+  
+  <!-- Lightning bolt -->
+  <path d="M12 8 L20 16 L12 24 L16 16 L12 8" fill="white" stroke="white" stroke-width="0.5"/>
+  
+  <!-- Small accent dot -->
+  <circle cx="22" cy="10" r="2" fill="#10B981" stroke="white" stroke-width="0.5"/>
+</svg>

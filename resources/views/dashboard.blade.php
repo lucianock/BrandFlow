@@ -7,21 +7,39 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Welcome Section -->
+            <!-- Welcome Section with BrandFlow Logo -->
             <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg mb-8">
                 <div class="px-6 py-8 text-white">
                     <div class="flex items-center justify-between">
-                        <div>
-                            <h1 class="text-3xl font-bold mb-2">¡Bienvenido a BrandFlow!</h1>
-                            <p class="text-blue-100 text-lg">Sistema de gestión de productos y marcas</p>
-                            <p class="text-blue-200 text-sm mt-2">Último acceso: {{ now()->format('d/m/Y H:i') }}</p>
+                        <div class="flex items-center space-x-6">
+                            <!-- BrandFlow Logo -->
+                            <div class="flex items-center space-x-3">
+                                <div class="relative">
+                                    <div class="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg border border-white/30">
+                                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                        </svg>
+                                    </div>
+                                    <div class="absolute -top-2 -right-2 w-4 h-4 bg-green-400 rounded-full border-2 border-white shadow-lg"></div>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-3xl font-bold text-white">
+                                        Brand<span class="text-blue-200">Flow</span>
+                                    </span>
+                                    <span class="text-blue-100 text-sm">Sistema de Gestión</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="hidden md:block">
                             <div class="text-right">
-                                <div class="text-4xl font-bold">{{ \App\Models\Producto::count() }}</div>
+                                <div class="text-4xl font-bold">{{ $stats['total_productos'] }}</div>
                                 <div class="text-blue-200">Productos Totales</div>
                             </div>
                         </div>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-blue-100 text-lg">¡Bienvenido al panel de administración!</p>
+                        <p class="text-blue-200 text-sm mt-1">Último acceso: {{ now()->format('d/m/Y H:i') }}</p>
                     </div>
                 </div>
             </div>

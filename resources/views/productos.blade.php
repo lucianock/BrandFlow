@@ -141,12 +141,12 @@
                                         <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
                                             <button @click="$dispatch('open-quick-view', { 
                                                 id: {{ $producto->idProducto }},
-                                                nombre: '{{ $producto->prdNombre }}',
+                                                nombre: '{{ addslashes($producto->prdNombre) }}',
                                                 precio: {{ $producto->prdPrecio }},
                                                 imagen: '{{ $producto->prdImagen }}',
                                                 descripcion: '{{ addslashes($producto->prdDescripcion) }}',
-                                                marca: '{{ $producto->getMarca->mkNombre }}',
-                                                categoria: '{{ $producto->getCate->catNombre }}',
+                                                marca: '{{ addslashes($producto->getMarca->mkNombre) }}',
+                                                categoria: '{{ addslashes($producto->getCate->catNombre) }}',
                                                 activo: {{ $producto->prdActivo ? 'true' : 'false' }}
                                             })" 
                                                     class="opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white text-gray-900 px-4 py-2 rounded-md font-medium hover:bg-gray-100">
@@ -243,16 +243,7 @@
     <!-- Modal Global para Vista Rápida -->
     <div x-data="{ 
         open: false, 
-        currentProduct: null,
-        init() {
-            this.$watch('open', value => {
-                if (value) {
-                    document.body.classList.add('overflow-hidden');
-                } else {
-                    document.body.classList.remove('overflow-hidden');
-                }
-            });
-        }
+        currentProduct: null
     }" 
     @open-quick-view.window="
         currentProduct = $event.detail;
@@ -308,42 +299,42 @@
                             <div x-show="currentProduct" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <!-- Product Image -->
                                 <div class="relative">
-                                    <img :src="'/imgs/' + currentProduct.imagen" 
-                                         :alt="currentProduct.nombre" 
+                                    <img :src="'/imgs/' + (currentProduct?.imagen || 'noDisponible.jpg')" 
+                                         :alt="currentProduct?.nombre || 'Producto'" 
                                          class="w-full h-64 object-cover rounded-lg">
                                     <div class="absolute top-2 right-2">
-                                        <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full dark:bg-green-900 dark:text-green-300" x-text="'$' + currentProduct.precio.toFixed(2)"></span>
+                                        <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full dark:bg-green-900 dark:text-green-300" x-text="'$' + (currentProduct?.precio || 0).toFixed(2)"></span>
                                     </div>
                                 </div>
 
                                 <!-- Product Details -->
                                 <div class="space-y-4">
                                     <div>
-                                        <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2" x-text="currentProduct.nombre"></h4>
+                                        <h4 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2" x-text="currentProduct?.nombre || 'Sin nombre'"></h4>
                                         
                                         <div class="flex items-center space-x-2 mb-3">
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300" x-text="currentProduct.marca"></span>
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300" x-text="currentProduct.categoria"></span>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300" x-text="currentProduct?.marca || 'Sin marca'"></span>
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300" x-text="currentProduct?.categoria || 'Sin categoría'"></span>
                                         </div>
 
-                                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed" x-text="currentProduct.descripcion"></p>
+                                        <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed" x-text="currentProduct?.descripcion || 'Sin descripción'"></p>
                                     </div>
 
                                     <!-- Product Stats -->
                                     <div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200 dark:border-gray-700">
                                         <div class="text-center">
-                                            <div class="text-2xl font-bold text-blue-600 dark:text-blue-400" x-text="'$' + currentProduct.precio.toFixed(2)"></div>
+                                            <div class="text-2xl font-bold text-blue-600 dark:text-blue-400" x-text="'$' + (currentProduct?.precio || 0).toFixed(2)"></div>
                                             <div class="text-xs text-gray-500 dark:text-gray-400">Precio</div>
                                         </div>
                                         <div class="text-center">
-                                            <div class="text-2xl font-bold text-green-600 dark:text-green-400" x-text="currentProduct.activo ? 'Activo' : 'Inactivo'"></div>
+                                            <div class="text-2xl font-bold" :class="currentProduct?.activo ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'" x-text="currentProduct?.activo ? 'Activo' : 'Inactivo'"></div>
                                             <div class="text-xs text-gray-500 dark:text-gray-400">Estado</div>
                                         </div>
                                     </div>
 
                                     <!-- Actions -->
                                     <div class="flex space-x-3 pt-4">
-                                        <a :href="'/producto/edit/' + currentProduct.id" 
+                                        <a :href="'/producto/edit/' + (currentProduct?.id || 0)" 
                                            class="flex-1 inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -351,7 +342,7 @@
                                             Editar
                                         </a>
                                         
-                                        <form :action="'/producto/delete/' + currentProduct.id" method="POST" class="flex-1">
+                                        <form :action="'/producto/delete/' + (currentProduct?.id || 0)" method="POST" class="flex-1">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" 
