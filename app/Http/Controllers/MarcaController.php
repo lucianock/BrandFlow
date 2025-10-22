@@ -120,12 +120,42 @@ class MarcaController extends Controller
     }
 
     /**
+     * Show the form for confirming deletion of the specified resource.
+     */
+    public function confirmDelete(Marca $marca) : View
+    {
+        $productosAsociados = $marca->productos()->count();
+        return view('marcaDelete', [
+            'marca' => $marca,
+            'productosAsociados' => $productosAsociados
+        ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Marca $marca) : RedirectResponse
+    public function destroy(Request $request, Marca $marca) : RedirectResponse
     {
         try {
             $nombreMarca = $marca->mkNombre;
+            
+            // Validar confirmación
+            $request->validate([
+                'confirmacion' => 'required|string'
+            ], [
+                'confirmacion.required' => 'Debe confirmar la eliminación escribiendo el nombre de la marca.',
+                'confirmacion.string' => 'La confirmación debe ser un texto.'
+            ]);
+
+            // Verificar que la confirmación coincida exactamente
+            if ($request->confirmacion !== $nombreMarca) {
+                return redirect()->back()
+                    ->with([
+                        'mensaje' => 'La confirmación no coincide. Debe escribir exactamente: ' . $nombreMarca,
+                        'css' => 'red'
+                    ])
+                    ->withInput();
+            }
             
             // Verificar si hay productos asociados a esta marca
             $productosAsociados = $marca->productos()->count();

@@ -109,12 +109,42 @@ class CategoriaController extends Controller
     }
 
     /**
+     * Show the form for confirming deletion of the specified resource.
+     */
+    public function confirmDelete(Categoria $categoria) : View
+    {
+        $productosAsociados = $categoria->productos()->count();
+        return view('categoriaDelete', [
+            'categoria' => $categoria,
+            'productosAsociados' => $productosAsociados
+        ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Categoria $categoria) : RedirectResponse
+    public function destroy(Request $request, Categoria $categoria) : RedirectResponse
     {
         try {
             $nombreCategoria = $categoria->catNombre;
+            
+            // Validar confirmación
+            $request->validate([
+                'confirmacion' => 'required|string'
+            ], [
+                'confirmacion.required' => 'Debe confirmar la eliminación escribiendo el nombre de la categoría.',
+                'confirmacion.string' => 'La confirmación debe ser un texto.'
+            ]);
+
+            // Verificar que la confirmación coincida exactamente
+            if ($request->confirmacion !== $nombreCategoria) {
+                return redirect()->back()
+                    ->with([
+                        'mensaje' => 'La confirmación no coincide. Debe escribir exactamente: ' . $nombreCategoria,
+                        'css' => 'red'
+                    ])
+                    ->withInput();
+            }
             
             // Verificar si hay productos asociados a esta categoría
             $productosAsociados = $categoria->productos()->count();

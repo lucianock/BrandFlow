@@ -185,12 +185,40 @@ class ProductoController extends Controller
     }
 
     /**
+     * Show the form for confirming deletion of the specified resource.
+     */
+    public function confirmDelete(Producto $producto) : View
+    {
+        return view('productoDelete', [
+            'producto' => $producto
+        ]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Producto $producto) : RedirectResponse
+    public function destroy(Request $request, Producto $producto) : RedirectResponse
     {
         try {
             $nombreProducto = $producto->prdNombre;
+            
+            // Validar confirmación
+            $request->validate([
+                'confirmacion' => 'required|string'
+            ], [
+                'confirmacion.required' => 'Debe confirmar la eliminación escribiendo el nombre del producto.',
+                'confirmacion.string' => 'La confirmación debe ser un texto.'
+            ]);
+
+            // Verificar que la confirmación coincida exactamente
+            if ($request->confirmacion !== $nombreProducto) {
+                return redirect()->back()
+                    ->with([
+                        'mensaje' => 'La confirmación no coincide. Debe escribir exactamente: ' . $nombreProducto,
+                        'css' => 'red'
+                    ])
+                    ->withInput();
+            }
             
             // Eliminar imagen si no es la por defecto
             if ($producto->prdImagen && $producto->prdImagen !== 'noDisponible.jpg') {

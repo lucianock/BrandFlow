@@ -26,6 +26,8 @@ Route::get('/marca/edit/{marca}', [ MarcaController::class, 'edit' ])
         ->middleware('auth');
 Route::put('/marca/update/{marca}', [ MarcaController::class, 'update' ])
         ->middleware('auth');
+Route::get('/marca/delete/{marca}', [ MarcaController::class, 'confirmDelete' ])
+        ->middleware('auth');
 Route::delete('/marca/delete/{marca}', [ MarcaController::class, 'destroy' ])
         ->middleware('auth');
 
@@ -40,6 +42,8 @@ Route::get('/categoria/edit/{categoria}', [ CategoriaController::class, 'edit' ]
         ->middleware('auth');
 Route::put('/categoria/update/{categoria}', [ CategoriaController::class, 'update' ])
         ->middleware('auth');
+Route::get('/categoria/delete/{categoria}', [ CategoriaController::class, 'confirmDelete' ])
+        ->middleware('auth');
 Route::delete('/categoria/delete/{categoria}', [ CategoriaController::class, 'destroy' ])
         ->middleware('auth');
 
@@ -53,6 +57,8 @@ Route::post('/producto/store', [ ProductoController::class, 'store' ])
 Route::get('/producto/edit/{producto}', [ ProductoController::class, 'edit' ])
         ->middleware('auth');
 Route::put('/producto/update/{producto}', [ ProductoController::class, 'update' ])
+        ->middleware('auth');
+Route::get('/producto/delete/{producto}', [ ProductoController::class, 'confirmDelete' ])
         ->middleware('auth');
 Route::delete('/producto/delete/{producto}', [ ProductoController::class, 'destroy' ])
         ->middleware('auth');
