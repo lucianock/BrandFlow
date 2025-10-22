@@ -11,13 +11,13 @@ class Producto extends Model
     protected $primaryKey = 'idProducto';
     public $timestamps = false;
     protected $fillable = [
-                            'prdNombre',
-                            'prdPrecio',
-                            'idMarca',
-                            'idCategoria',
-                            'prdDescripcion',
-                            'prdImagen'
-                        ];
+        'prdNombre',
+        'prdPrecio',
+        'idMarca',
+        'idCategoria',
+        'prdDescripcion',
+        'prdImagen'
+    ];
     public function getMarca()
     {
         return $this->belongsTo(
