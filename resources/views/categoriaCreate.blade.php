@@ -22,6 +22,7 @@
                     <form method="POST" action="/categoria/store" class="space-y-6">
                         @csrf
                         
+                        <!-- test -->
                         <div>
                             <x-input-label for="catNombre" :value="__('Nombre de la Categoría')" />
                             <x-text-input id="catNombre" 
